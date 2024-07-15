@@ -29,7 +29,9 @@ const HomeScreen = () => {
   }, [isFocused]);
 
   const filteredData = contacts.filter(x =>
-    `${x.firstName}${x.lastName}`.toLowerCase().includes(searchKey),
+    `${x.firstName}${x.lastName}`
+      .toLowerCase()
+      .includes(searchKey.trim().toLowerCase()),
   );
 
   const components: IPageListItem[] = [
