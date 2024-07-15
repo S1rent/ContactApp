@@ -10,15 +10,15 @@ const HomeActionButton: React.FC = () => {
     navigate(Routes.Create);
   };
   return (
-    <TouchableOpacity onPress={handleNavigate}>
-      <View style={styles.containerView}>
+    <View style={styles.containerView}>
+      <TouchableOpacity onPress={handleNavigate}>
         <MaterialCommunityIcon
           name="plus"
           color={colors.MainTheme1}
           size={32}
         />
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -35,5 +35,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 1,
+    borderWidth: 1,
   },
 });
