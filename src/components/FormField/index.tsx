@@ -14,8 +14,16 @@ const FormField: React.FC<{
   value?: string;
   label: string;
   keyboardType?: KeyboardTypeOptions;
-  onChangeText: (value: string) => void;
-}> = ({value, placeholder, onChangeText, label, keyboardType}) => {
+  onChangeText?: (value: string) => void;
+  disabled?: boolean;
+}> = ({
+  value,
+  placeholder,
+  onChangeText,
+  label,
+  keyboardType,
+  disabled = false,
+}) => {
   return (
     <View>
       <View style={styles.labelContainer}>
@@ -23,6 +31,7 @@ const FormField: React.FC<{
       </View>
       <Card>
         <TextInput
+          editable={!disabled}
           keyboardType={keyboardType}
           placeholderTextColor={colors.GrayC0C1C1}
           style={styles.searchBar}

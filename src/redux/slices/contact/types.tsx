@@ -10,3 +10,8 @@ export interface IGetContactResponseWrapper {
   message: string;
   data: IContactData[];
 }
+
+export interface IGetContactDetailResponseWrapper {
+  message: string;
+  data: IContactData;
+}

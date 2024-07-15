@@ -2,13 +2,18 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {IContactData} from '../../../redux/slices/contact/types';
 import Card from '../../../components/Card';
-import {colors} from '../../../constants';
+import {colors, Routes} from '../../../constants';
 import MaterialCommunityIcon from '../../../components/MaterialCommunityIcon';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {setSelectedItemId} from '../../../redux/slices/contact/contactSlice';
 
 const HomeContactListItem: React.FC<{
   data: IContactData;
 }> = ({data}) => {
   const [imageError, setImageError] = useState(false);
+  const {navigate} = useNavigation();
+  const dispatch = useDispatch();
 
   Image.getSize(
     data.photo,
@@ -21,9 +26,15 @@ const HomeContactListItem: React.FC<{
   );
 
   const name = `${data.firstName} ${data.lastName}`;
+
+  const handleNavigate = () => {
+    dispatch(setSelectedItemId(data?.id));
+    navigate(Routes.Detail);
+  };
+
   return (
     <Card style={styles.wrapperView}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleNavigate}>
         <View style={styles.containerView}>
           <View>
             {!imageError ? (

@@ -3,6 +3,7 @@ import {ApiEndpoints, baseUrl} from '../constants';
 import {useCallback, useState} from 'react';
 import {
   IContactData,
+  IGetContactDetailResponseWrapper,
   IGetContactResponseWrapper,
 } from '../redux/slices/contact/types';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,12 +11,15 @@ import {
   initialCreateData,
   setContacts,
   setCreateData,
+  setSelectedItem,
 } from '../redux/slices/contact/contactSlice';
 import {RootState} from '../redux/store';
 
 export const useContactsAPI = () => {
   const dispatch = useDispatch();
-  const {createData} = useSelector((state: RootState) => state.contact);
+  const {createData, selectedItemId} = useSelector(
+    (state: RootState) => state.contact,
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchContacts = useCallback(async () => {
@@ -47,25 +51,32 @@ export const useContactsAPI = () => {
     }
   }, [createData]);
 
-  const deleteContact = useCallback(async (id: string) => {
+  const deleteContact = useCallback(async () => {
     try {
       const response = await axios.delete(
-        `${baseUrl}/${ApiEndpoints.Contact}/${id}`,
+        `${baseUrl}/${ApiEndpoints.Contact}/${selectedItemId}`,
       );
-      return response;
+
+      return response.status >= 200 && response.status <= 299;
     } catch (error: any) {
       console.error(`Error Delete Contact: ${error.message}`);
     }
   }, []);
 
-  const fetchContactDetail = useCallback(async (id: string) => {
+  const fetchContactDetail = useCallback(async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
-        `${baseUrl}/${ApiEndpoints.Contact}/${id}`,
+        `${baseUrl}/${ApiEndpoints.Contact}/${selectedItemId}`,
       );
-      return response;
+      const data: IGetContactDetailResponseWrapper = response.data;
+      dispatch(setSelectedItem(data.data));
+
+      return data.data;
     } catch (error: any) {
       console.error(`Error Fetch Contact Detail: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 

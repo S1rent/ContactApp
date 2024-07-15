@@ -5,6 +5,8 @@ interface ContactSliceInitialState {
   contacts: IContactData[];
   searchKey: string;
   createData: IContactData;
+  selectedItemId?: string;
+  selectedItem?: IContactData;
 }
 
 export const initialCreateData: IContactData = {
@@ -19,6 +21,8 @@ const initialState: ContactSliceInitialState = {
   contacts: [],
   searchKey: '',
   createData: initialCreateData,
+  selectedItemId: undefined,
+  selectedItem: undefined,
 };
 
 const contactSlice = createSlice({
@@ -34,8 +38,20 @@ const contactSlice = createSlice({
     setCreateData: (state, action: PayloadAction<IContactData>) => {
       state.createData = action.payload;
     },
+    setSelectedItemId: (state, action: PayloadAction<string>) => {
+      state.selectedItemId = action.payload;
+    },
+    setSelectedItem: (state, action: PayloadAction<IContactData>) => {
+      state.selectedItem = action.payload;
+    },
   },
 });
 
-export const {setContacts, setSearchKey, setCreateData} = contactSlice.actions;
+export const {
+  setContacts,
+  setSearchKey,
+  setCreateData,
+  setSelectedItemId,
+  setSelectedItem,
+} = contactSlice.actions;
 export default contactSlice.reducer;
