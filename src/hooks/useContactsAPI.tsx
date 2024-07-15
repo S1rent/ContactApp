@@ -17,7 +17,7 @@ import {RootState} from '../redux/store';
 
 export const useContactsAPI = () => {
   const dispatch = useDispatch();
-  const {createData, selectedItemId} = useSelector(
+  const {createData, selectedItemId, editData} = useSelector(
     (state: RootState) => state.contact,
   );
   const [isLoading, setIsLoading] = useState(true);
@@ -70,6 +70,7 @@ export const useContactsAPI = () => {
         `${baseUrl}/${ApiEndpoints.Contact}/${selectedItemId}`,
       );
       const data: IGetContactDetailResponseWrapper = response.data;
+      
       dispatch(setSelectedItem(data.data));
 
       return data.data;
@@ -80,13 +81,17 @@ export const useContactsAPI = () => {
     }
   }, []);
 
-  const editContact = useCallback(async (id: string, param: IContactData) => {
+  const editContact = useCallback(async (param: IContactData) => {
     try {
+      console.log(`test phil ${JSON.stringify(param)}`);
       const response = await axios.put(
-        `${baseUrl}/${ApiEndpoints.Contact}/${id}`,
-        param,
+        `${baseUrl}/${ApiEndpoints.Contact}/${param?.id}`,
+        {
+          ...param,
+          id: undefined,
+        },
       );
-      return response;
+      return response.status >= 200 && response.status <= 299;
     } catch (error: any) {
       console.error(`Error Edit Contact: ${error.message}`);
     }

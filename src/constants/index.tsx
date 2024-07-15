@@ -6,6 +6,7 @@ export enum Routes {
   Home = 'Home',
   Detail = 'Detail',
   Create = 'Create',
+  Update = 'Update',
 }
 
 export enum colors {

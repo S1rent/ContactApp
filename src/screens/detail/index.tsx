@@ -12,19 +12,20 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
 import {useContactsAPI} from '../../hooks/useContactsAPI';
-import {colors} from '../../constants';
+import {colors, Routes} from '../../constants';
 import FormField from '../../components/FormField';
 import MaterialCommunityIcon from '../../components/MaterialCommunityIcon';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import LoadingIndicator from '../../components/LoadingIndicator';
 
 const DetailScreen: React.FC = () => {
+  const isFocused = useIsFocused();
   const {fetchContactDetail, isLoading, deleteContact} = useContactsAPI();
   const {selectedItem, selectedItemId} = useSelector(
     (state: RootState) => state.contact,
   );
   const [imageError, setImageError] = useState(true);
-  const {goBack} = useNavigation();
+  const {goBack, navigate} = useNavigation();
 
   const handleDelete = async () => {
     const isSuccess = await deleteContact();
@@ -37,6 +38,10 @@ const DetailScreen: React.FC = () => {
         ToastAndroid.SHORT,
       );
     }
+  };
+
+  const handleUpdate = async () => {
+    navigate(Routes.Update);
   };
 
   const checkImageURL = (url: string) => {
@@ -52,10 +57,10 @@ const DetailScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    if (selectedItemId) {
+    if (selectedItemId || isFocused) {
       fetchContactDetail();
     }
-  }, [selectedItemId]);
+  }, [selectedItemId, isFocused]);
 
   useEffect(() => {
     if (selectedItem?.photo) {
@@ -126,9 +131,7 @@ const DetailScreen: React.FC = () => {
                   marginTop: 16,
                 },
               ]}>
-              <TouchableOpacity
-              // onPress={handlePress}
-              >
+              <TouchableOpacity onPress={handleUpdate}>
                 <Text style={styles.buttonLabel}>Update</Text>
               </TouchableOpacity>
             </View>

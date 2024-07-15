@@ -7,6 +7,7 @@ interface ContactSliceInitialState {
   createData: IContactData;
   selectedItemId?: string;
   selectedItem?: IContactData;
+  editData: IContactData;
 }
 
 export const initialCreateData: IContactData = {
@@ -23,6 +24,7 @@ const initialState: ContactSliceInitialState = {
   createData: initialCreateData,
   selectedItemId: undefined,
   selectedItem: undefined,
+  editData: initialCreateData,
 };
 
 const contactSlice = createSlice({
@@ -44,6 +46,9 @@ const contactSlice = createSlice({
     setSelectedItem: (state, action: PayloadAction<IContactData>) => {
       state.selectedItem = action.payload;
     },
+    setEditData: (state, action: PayloadAction<IContactData>) => {
+      state.editData = action.payload;
+    },
   },
 });
 
@@ -53,5 +58,6 @@ export const {
   setCreateData,
   setSelectedItemId,
   setSelectedItem,
+  setEditData,
 } = contactSlice.actions;
 export default contactSlice.reducer;
