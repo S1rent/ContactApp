@@ -1,15 +1,30 @@
 import axios from 'axios';
 import {ApiEndpoints, baseUrl} from '../constants';
-import {useCallback} from 'react';
-import {IContactData} from '../redux/slices/contact/types';
+import {useCallback, useState} from 'react';
+import {
+  IContactData,
+  IGetContactResponseWrapper,
+} from '../redux/slices/contact/types';
+import {useDispatch} from 'react-redux';
+import {setContacts} from '../redux/slices/contact/contactSlice';
 
 export const useContactsAPI = () => {
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+
   const fetchContacts = useCallback(async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(`${baseUrl}/${ApiEndpoints.Contact}`);
-      return response;
+      const data: IGetContactResponseWrapper = response.data;
+
+      dispatch(setContacts(data.data));
+
+      return data.data;
     } catch (error: any) {
       console.error(`Error Fetch Contacts: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -65,5 +80,6 @@ export const useContactsAPI = () => {
     deleteContact,
     fetchContactDetail,
     editContact,
+    isLoading,
   };
 };

@@ -3,10 +3,12 @@ import {IContactData} from './types';
 
 interface ContactSliceInitialState {
   contacts: IContactData[];
+  searchKey: string;
 }
 
 const initialState: ContactSliceInitialState = {
   contacts: [],
+  searchKey: '',
 };
 
 const contactSlice = createSlice({
@@ -16,8 +18,11 @@ const contactSlice = createSlice({
     setContacts: (state, action: PayloadAction<IContactData[]>) => {
       state.contacts = action.payload;
     },
+    setSearchKey: (state, action: PayloadAction<string>) => {
+      state.searchKey = action.payload;
+    },
   },
 });
 
-export const {setContacts} = contactSlice.actions;
+export const {setContacts, setSearchKey} = contactSlice.actions;
 export default contactSlice.reducer;

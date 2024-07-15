@@ -15,7 +15,11 @@ const App: React.FC = () => {
       <NavigationContainer>
         <Provider store={store}>
           <Stack.Navigator>
-            <Stack.Screen name={Routes.Home} component={HomeScreen} />
+            <Stack.Screen
+              name={Routes.Home}
+              component={HomeScreen}
+              options={{headerShown: false}}
+            />
           </Stack.Navigator>
         </Provider>
       </NavigationContainer>
