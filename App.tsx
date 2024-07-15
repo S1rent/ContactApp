@@ -6,6 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './src/screens/home';
 import {Routes} from './src/constants';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import CreateScreen from './src/screens/create';
 
 const App: React.FC = () => {
   const Stack = createNativeStackNavigator();
@@ -18,6 +19,11 @@ const App: React.FC = () => {
             <Stack.Screen
               name={Routes.Home}
               component={HomeScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={Routes.Create}
+              component={CreateScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

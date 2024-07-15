@@ -8,19 +8,25 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
 import {useContactsAPI} from '../../hooks/useContactsAPI';
 import {IPageListItem} from '../../types';
-import HomeContactListItem from './components/HomeContactList';
+import HomeContactListItem from './components/HomeContactListItem';
 import {IContactData} from '../../redux/slices/contact/types';
 import LoadingIndicator from '../../components/LoadingIndicator';
+import HomeActionButton from './components/HomeActionButton';
+import {colors} from '../../constants';
+import {useIsFocused} from '@react-navigation/native';
 
 const HomeScreen = () => {
+  const isFocused = useIsFocused();
   const {fetchContacts, isLoading} = useContactsAPI();
   const {contacts, searchKey} = useSelector(
     (state: RootState) => state.contact,
   );
 
   useEffect(() => {
-    fetchContacts();
-  }, []);
+    if (isFocused) {
+      fetchContacts();
+    }
+  }, [isFocused]);
 
   const filteredData = contacts.filter(x =>
     `${x.firstName}${x.lastName}`.toLowerCase().includes(searchKey),
@@ -34,7 +40,7 @@ const HomeScreen = () => {
       id: 'home-search-box',
     },
     {
-      id: 'loading-indicator',
+      id: 'home-loading-indicator',
     },
     {
       id: 'home-no-data-view',
@@ -56,7 +62,7 @@ const HomeScreen = () => {
       ) : (
         <></>
       );
-    } else if (item.id === 'loading-indicator') {
+    } else if (item.id === 'home-loading-indicator') {
       return isLoading ? <LoadingIndicator /> : <></>;
     }
 
@@ -67,13 +73,15 @@ const HomeScreen = () => {
     <LinearGradient
       start={{x: 0, y: 0}}
       end={{x: 0, y: 1}}
-      colors={['#0143c2', '#008fe0']}
+      colors={[colors.MainTheme1, colors.MainTheme2]}
       style={styles.background}>
       <FlatList
         data={components}
+        contentContainerStyle={{paddingBottom: 32}}
         renderItem={renderItem}
         keyExtractor={(item: IPageListItem) => item.id}
       />
+      <HomeActionButton />
     </LinearGradient>
   );
 };

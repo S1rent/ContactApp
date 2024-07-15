@@ -5,11 +5,17 @@ import {
   IContactData,
   IGetContactResponseWrapper,
 } from '../redux/slices/contact/types';
-import {useDispatch} from 'react-redux';
-import {setContacts} from '../redux/slices/contact/contactSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  initialCreateData,
+  setContacts,
+  setCreateData,
+} from '../redux/slices/contact/contactSlice';
+import {RootState} from '../redux/store';
 
 export const useContactsAPI = () => {
   const dispatch = useDispatch();
+  const {createData} = useSelector((state: RootState) => state.contact);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchContacts = useCallback(async () => {
@@ -28,17 +34,18 @@ export const useContactsAPI = () => {
     }
   }, []);
 
-  const addContact = useCallback(async (param: IContactData) => {
+  const addContact = useCallback(async () => {
     try {
-      const response = await axios.post(
-        `${baseUrl}/${ApiEndpoints.Contact}`,
-        param,
-      );
-      return response;
+      const response = await axios.post(`${baseUrl}/${ApiEndpoints.Contact}`, {
+        ...createData,
+        id: undefined,
+      });
+      dispatch(setCreateData(initialCreateData));
+      return response.status >= 200 && response.status <= 299;
     } catch (error: any) {
       console.error(`Error Add Contact: ${error.message}`);
     }
-  }, []);
+  }, [createData]);
 
   const deleteContact = useCallback(async (id: string) => {
     try {

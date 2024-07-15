@@ -10,9 +10,15 @@ const HomeContactListItem: React.FC<{
 }> = ({data}) => {
   const [imageError, setImageError] = useState(false);
 
-  const handleImageError = () => {
-    setImageError(true);
-  };
+  Image.getSize(
+    data.photo,
+    () => {
+      setImageError(false);
+    },
+    _ => {
+      setImageError(true);
+    },
+  );
 
   const name = `${data.firstName} ${data.lastName}`;
   return (
@@ -20,12 +26,8 @@ const HomeContactListItem: React.FC<{
       <TouchableOpacity>
         <View style={styles.containerView}>
           <View>
-            {!imageError && data.photo !== 'N/A' ? (
-              <Image
-                source={{uri: data.photo}}
-                style={styles.imageView}
-                onError={handleImageError}
-              />
+            {!imageError ? (
+              <Image source={{uri: data.photo}} style={styles.imageView} />
             ) : (
               <View style={styles.imageView}>
                 <MaterialCommunityIcon
