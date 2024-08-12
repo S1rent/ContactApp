@@ -83,11 +83,6 @@ export const useContactsAPI = () => {
 
   const editContact = useCallback(async (param: IContactData) => {
     try {
-      console.log(`test phil ${JSON.stringify({
-        ...param,
-        id: undefined,
-      })}`)
-      console.log(`test phil id ${param?.id}`)
       const response = await axios.put(
         `${baseUrl}/${ApiEndpoints.Contact}/${param?.id}`,
         {
